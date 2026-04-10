@@ -1,0 +1,14 @@
+[Unit]
+Description=Telegram WS Proxy iptables redirection
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/tg-ws-proxy
+ExecStart=/usr/bin/bash /opt/tg-ws-proxy/iptables-tg.sh start
+ExecStop=/usr/bin/bash /opt/tg-ws-proxy/iptables-tg.sh stop
+
+[Install]
+WantedBy=multi-user.target

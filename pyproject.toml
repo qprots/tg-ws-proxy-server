@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tg-ws-proxy"
+dynamic=["version"]
+
+description = "Telegram Desktop WebSocket Bridge Proxy"
+readme = "README.md"
+requires-python = ">=3.8"
+
+license = { name = "MIT", file = "LICENSE" }
+
+authors = [
+    { name = "Flowseal" }
+]
+
+keywords = [
+    "telegram",
+    "tdesktop",
+    "proxy",
+    "bypass",
+    "websocket",
+    "socks5",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Networking :: Firewalls",
+]
+
+dependencies = [
+    "cryptography>=41.0.7",
+]
+
+[project.scripts]
+tg-ws-proxy = "proxy.tg_ws_proxy:main"
+
+[project.urls]
+Source = "https://github.com/Flowseal/tg-ws-proxy"
+Issues = "https://github.com/Flowseal/tg-ws-proxy/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["proxy"]
+
+[tool.hatch.version]
+path = "proxy/__init__.py"
