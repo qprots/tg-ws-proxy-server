@@ -7,7 +7,7 @@ services:
     restart: always
     network_mode: host
     environment:
-      TG_WS_PROXY_HOST: "0.0.0.0"
+      TG_WS_PROXY_HOST: "127.0.0.1"
       TG_WS_PROXY_PORT: "10080"
       TG_WS_PROXY_DC_IPS: "2:149.154.167.220 4:149.154.167.220"
 
