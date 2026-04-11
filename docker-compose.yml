@@ -10,6 +10,11 @@ services:
       TG_WS_PROXY_HOST: "127.0.0.1"
       TG_WS_PROXY_PORT: "10080"
       TG_WS_PROXY_DC_IPS: "2:149.154.167.220 4:149.154.167.220"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redsocks:
     build:
@@ -18,5 +23,10 @@ services:
     container_name: tg-ws-redsocks
     restart: always
     network_mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     depends_on:
       - tg-ws-proxy
