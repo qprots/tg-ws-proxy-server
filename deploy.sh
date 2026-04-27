@@ -2,7 +2,7 @@
 #
 # TG WS Proxy - One-click Deploy Script
 # Usage: ./deploy.sh <hostname>
-# Example: ./deploy.sh cloud7
+# Example: ./deploy.sh server
 #
 
 set -euo pipefail
@@ -34,13 +34,6 @@ sudo rm -rf "$TMP_DIR"
 
 cd "$REMOTE_DIR"
 
-# Docker DNS fix (ensures containers can use apt/pip)
-#if [ ! -f /etc/docker/daemon.json ]; then
-#    echo 'Setting up Docker DNS fix...'
-#    echo '{"dns": ["1.1.1.1", "8.8.8.8"]}' | sudo tee /etc/docker/daemon.json > /dev/null
-#    sudo systemctl restart docker
-#fi
-
 # Setup systemd service
 echo 'Configuring systemd service...'
 sudo cp tg-ws-proxy-iptables.service /etc/systemd/system/
@@ -60,6 +53,12 @@ fi
 echo 'Applying iptables rules...'
 sudo bash iptables-tg.sh start
 sudo systemctl start tg-ws-proxy-iptables
+
+# Setup daily restart cron (2:00 AM server time)
+echo 'Configuring daily restart cron...'
+CRON_CMD="0 2 * * * cd $REMOTE_DIR && docker compose restart tg-ws-redsocks tg-ws-proxy 2>/dev/null || docker-compose restart tg-ws-redsocks tg-ws-proxy"
+(sudo crontab -l 2>/dev/null | grep -v 'tg-ws-proxy' || true; echo "\$CRON_CMD") | sudo crontab -
+echo 'Cron set: daily restart at 02:00'
 EOF
 
 echo "✅ Deployment to $TARGET_HOST complete!"

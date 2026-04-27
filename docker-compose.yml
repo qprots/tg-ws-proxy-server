@@ -9,7 +9,9 @@ services:
     environment:
       TG_WS_PROXY_HOST: "127.0.0.1"
       TG_WS_PROXY_PORT: "10080"
-      TG_WS_PROXY_DC_IPS: "2:149.154.167.220 4:149.154.167.220"
+      TG_WS_PROXY_DC_IPS: "1:149.154.167.220 2:149.154.167.220 3:149.154.167.220 4:149.154.167.220 5:149.154.167.220"
+      #CF_DOMAIN: "tox-chat.online"
+      #CF_IP: "104.21.36.99"
     logging:
       driver: "json-file"
       options:

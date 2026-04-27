@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-REDSOCKS_PORT=12345
+PROXY_PORT=${TG_WS_PROXY_PORT:-10080}
 CHAIN_NAME="TG_WS_REDIRECT"
 PROG_DIR="/opt/tg-ws-proxy"
 
@@ -34,9 +34,9 @@ start() {
     iptables -t nat -A "$CHAIN_NAME" -m owner --uid-owner 999 -j RETURN
 
     for subnet in "${SUBNETS[@]}"; do
-        if ! iptables -t nat -C "$CHAIN_NAME" -d "$subnet" -p tcp -j REDIRECT --to-ports "$REDSOCKS_PORT" 2>/dev/null; then
-            iptables -t nat -A "$CHAIN_NAME" -d "$subnet" -p tcp -j REDIRECT --to-ports "$REDSOCKS_PORT"
-            echo "  + $subnet -> :$REDSOCKS_PORT"
+        if ! iptables -t nat -C "$CHAIN_NAME" -d "$subnet" -p tcp -j REDIRECT --to-ports "$PROXY_PORT" 2>/dev/null; then
+            iptables -t nat -A "$CHAIN_NAME" -d "$subnet" -p tcp -j REDIRECT --to-ports "$PROXY_PORT"
+            echo "  + $subnet -> :$PROXY_PORT"
         fi
     done
 
@@ -47,7 +47,7 @@ start() {
 
     echo ""
     echo "Redirection enabled."
-    echo "Telegram traffic -> :$REDSOCKS_PORT -> SOCKS5 :10080 -> WSS"
+    echo "Telegram traffic -> :$PROXY_PORT -> SOCKS5 :10080 -> WSS"
 }
 
 stop() {
